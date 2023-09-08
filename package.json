@@ -1,7 +1,7 @@
 {
   "name": "top-todo",
   "version": "1.0.0",
-  "description": "",
+  "description": "html, css, vanilla js with webpack",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
     "build": "webpack --config webpack.prod.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vanessa TC",
   "license": "ISC",
   "devDependencies": {
     "css-loader": "^6.8.1",
