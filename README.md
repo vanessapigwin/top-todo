@@ -12,5 +12,9 @@ Live: https://vanessapigwin.github.io/top-todo/
 - [ ] Create models / objects (Project and Todo)
 - [ ] Add listeners to crude UI
 - [ ] Make add project work
+- [ ] Make delete project work
+- [ ] Make add todo work
+- [ ] Make delete todo work
+- [ ] Make edit Todo work
 
 ## Newly-learned concepts from Activity
