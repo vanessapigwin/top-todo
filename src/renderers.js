@@ -1,5 +1,4 @@
 const classedElement = (tag, cls) => {
-
     const element = document.createElement(tag);
     if (cls)
         element.classList.add(...cls);
@@ -32,7 +31,7 @@ const makeDropDown = () => {
     projImg.src = new URL('./icons/arrow_dd.png', import.meta.url);
     appendChildren(projTitleDiv, [projTitleContent, projImg]);
 
-    projTitleDiv.addEventListener('click', showSideBar);
+    // projTitleDiv.addEventListener('click', showSideBar);
 
     return projTitleDiv;
 }
@@ -58,19 +57,32 @@ const populateSidebarList = (ul, items) => {
 const initProjSideBar = (projectList) => {
     const projDiv = classedElement('div', ['proj-item']);
     const projTitle = classedElement('div');
-    projTitle.textContent = 'All Projects';
-
     const addProjButton = classedElement('button');
-    addProjButton.textContent = '+';
-    addProjButton.addEventListener('click', renderForm);
+    const buttonImg = classedElement('img', ['proj-icon']);
+
+    buttonImg.src = new URL('./icons/add.png', import.meta.url);
+    projTitle.textContent = 'All Projects';
+    addProjButton.appendChild(buttonImg);
 
     appendChildren(projDiv, [projTitle, addProjButton]);
     
     projectList.appendChild(projDiv);
 }
 
-const updateProjSideBar = (projectList, ...args) => {
-    console.log(...args)
+const updateProjSideBar = (projectList, args) => {
+    for (let arg of args) {
+        const projDiv = classedElement('div', ['proj-item']);
+        const projTitle = classedElement('div');
+        const addProjButton = classedElement('button');
+        const buttonImg = classedElement('img', ['proj-icon']);
+
+        buttonImg.src = new URL('./icons/remove.png', import.meta.url);
+        projTitle.textContent = arg;
+        addProjButton.appendChild(buttonImg);
+
+        appendChildren(projDiv, [projTitle, addProjButton]);
+        projectList.appendChild(projDiv);
+    }
 }
 
 const makeSidebar = () => {
@@ -109,9 +121,6 @@ const makeSidebar = () => {
 
 // initialize UI
 (() => {
-    const dropDownTitle = makeDropDown();
-    const sidebar = makeSidebar();
-
     // todo div
     const todos = ['test', 'test', 'test', 'test'];
     const toDoDiv = classedElement('div', ['todo-holder']);
@@ -121,9 +130,12 @@ const makeSidebar = () => {
         toDoDiv.appendChild(div);
     }
 
-    appendChildren(document.body, [makeLogo(), dropDownTitle, sidebar, toDoDiv]);
+    appendChildren(document.body, [
+        makeLogo(), makeDropDown(), makeSidebar(), toDoDiv
+    ]);
 })();
 
 export {
+    showSideBar,
     updateProjSideBar,
 }

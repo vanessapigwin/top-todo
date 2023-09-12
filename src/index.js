@@ -1,7 +1,21 @@
 import './style.css';
-import {updateProjSideBar} from './renderers'
+import {showSideBar, updateProjSideBar} from './renderers'
+
+const deleteProject = () => {
+    console.log('deleteProj')
+}
+
+const updateProjList = (projects) => {
+    updateProjSideBar(document.querySelector('#projects'), projects);
+    document.querySelectorAll('#projects > div > button').forEach(button => {
+        button.addEventListener('click', deleteProject);
+    })
+}
 
 (() => {
+    document.querySelector('.proj-title').addEventListener('click', showSideBar);
+
     const projects = ['Project1', 'Project2'];
-    updateProjSideBar(document.querySelector('#projects'), projects)
+    updateProjList(projects);
+
 })();

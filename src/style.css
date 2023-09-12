@@ -30,10 +30,14 @@ ul {
 }
 
 .header {
-    width: 100%;
+    width: auto;
     display: flex;
     padding: 10px var(--default-pad);
-    gap: 10px
+    gap: 10px;
+}
+
+.proj-title {
+    border-top: var(--default-border);
 }
 
 .logo {
@@ -79,6 +83,10 @@ ul.projects {
     align-items: center;
 }
 
+.proj-item > button {
+    display: flex;
+}
+
 @media only screen and (min-width: 600px) {
     body {
         height: 100vh;
@@ -94,6 +102,10 @@ ul.projects {
 
     .sidebar {
         display: flex;
+    }
+
+    .proj-title {
+        border-top: none
     }
 
     .proj-title > img {
@@ -138,8 +150,26 @@ body {
     font-size: 1.2em;
 }
 
+.proj-title {
+    cursor: pointer;
+}
+
 .list-title {
     font-weight: bold;
+}
+
+.proj-item > button {
+    background-color: #fff;
+    border: none;
+}
+
+.proj-item > button {
+    visibility: hidden;
+
+}
+
+.proj-item:hover > button {
+    visibility: visible;
 }
 
 .card {
