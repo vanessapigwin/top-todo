@@ -31,8 +31,6 @@ const makeDropDown = () => {
     projImg.src = new URL('./icons/arrow_dd.png', import.meta.url);
     appendChildren(projTitleDiv, [projTitleContent, projImg]);
 
-    // projTitleDiv.addEventListener('click', showSideBar);
-
     return projTitleDiv;
 }
 
@@ -67,6 +65,10 @@ const initProjSideBar = (projectList) => {
     appendChildren(projDiv, [projTitle, addProjButton]);
     
     projectList.appendChild(projDiv);
+}
+
+const clearProjSidebar = (projectList) => {
+    console.log(projectList)
 }
 
 const updateProjSideBar = (projectList, args) => {
@@ -138,4 +140,5 @@ const makeSidebar = () => {
 export {
     showSideBar,
     updateProjSideBar,
+    clearProjSidebar
 }
