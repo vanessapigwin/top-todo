@@ -11,20 +11,6 @@ const appendChildren = (parent, children) => {
     children.forEach(child => parent.appendChild(child));
 }
 
-const showSideBar = () => {
-    document.querySelector('.sidebar').classList.toggle('visible');
-    document.querySelector('.proj-title > img').classList.toggle('hidden');
-}
-
-const populateSidebarList = (ul, items) => {
-    for (let item of items) {
-        const li = classedElement('li');
-        li.textContent = item;
-        ul.appendChild(li);
-    }
-    return ul;
-}
-
 const makeLogo = () => {
     const logo = classedElement('div', ['logo', 'header']);
     const logoImg = classedElement('img');
@@ -46,7 +32,45 @@ const makeDropDown = () => {
     projImg.src = new URL('./icons/arrow_dd.png', import.meta.url);
     appendChildren(projTitleDiv, [projTitleContent, projImg]);
 
+    projTitleDiv.addEventListener('click', showSideBar);
+
     return projTitleDiv;
+}
+
+const renderForm = () => {
+    console.log('majke form')
+}
+
+const showSideBar = () => {
+    document.querySelector('.sidebar').classList.toggle('visible');
+    document.querySelector('.proj-title > img').classList.toggle('hidden');
+}
+
+const populateSidebarList = (ul, items) => {
+    for (let item of items) {
+        const li = classedElement('li');
+        li.textContent = item;
+        ul.appendChild(li);
+    }
+    return ul;
+}
+
+const initProjSideBar = (projectList) => {
+    const projDiv = classedElement('div', ['proj-item']);
+    const projTitle = classedElement('div');
+    projTitle.textContent = 'All Projects';
+
+    const addProjButton = classedElement('button');
+    addProjButton.textContent = '+';
+    addProjButton.addEventListener('click', renderForm);
+
+    appendChildren(projDiv, [projTitle, addProjButton]);
+    
+    projectList.appendChild(projDiv);
+}
+
+const updateProjSideBar = (projectList, ...args) => {
+    console.log(...args)
 }
 
 const makeSidebar = () => {
@@ -67,10 +91,9 @@ const makeSidebar = () => {
     populateSidebarList(timeLineList, deadlines);
 
     // by project title
-    const projects = ['All Projects'];
     const projList = classedElement('ul', ['categ-list', 'projects']);
-    projList.id = 'projectList';
-    populateSidebarList(projList, projects);
+    projList.id = 'projects';
+    initProjSideBar(projList);
     
     const sidebarContents = classedElement('div', ['sidebar']);
     appendChildren(sidebarContents, [
@@ -99,14 +122,8 @@ const makeSidebar = () => {
     }
 
     appendChildren(document.body, [makeLogo(), dropDownTitle, sidebar, toDoDiv]);
-
-    // add event listeners
-    dropDownTitle.addEventListener('click', showSideBar);
-
 })();
 
 export {
-    classedElement,
-    appendChildren,
-    populateSidebarList
+    updateProjSideBar,
 }
