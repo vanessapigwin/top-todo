@@ -8,8 +8,8 @@ Live: https://vanessapigwin.github.io/top-todo/
 
 ## Goal
 - [ ] Crude layout
-- [ ] Figure out which storage to use depending if localStorage is available
-- [ ] Create models / objects (Project and Todo)
+- [x] Figure out which storage to use depending if localStorage is available
+- [ ] Create models / objects (Todo)
 - [ ] Add listeners to crude UI
 - [ ] Make add project work
 - [ ] Make delete project work

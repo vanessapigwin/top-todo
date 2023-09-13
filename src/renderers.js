@@ -57,6 +57,7 @@ const initProjSideBar = (projectList) => {
     const projTitle = classedElement('div');
     const addProjButton = classedElement('button');
     const buttonImg = classedElement('img', ['proj-icon']);
+    buttonImg.id = 'addproj';
 
     buttonImg.src = new URL('./icons/add.png', import.meta.url);
     projTitle.textContent = 'All Projects';
@@ -67,23 +68,23 @@ const initProjSideBar = (projectList) => {
     projectList.appendChild(projDiv);
 }
 
-const clearProjSidebar = (projectList) => {
-    console.log(projectList)
+const clearProjSidebar = () => {
+    // document.querySelectorAll('#projects > .added-projs')
 }
 
-const updateProjSideBar = (projectList, args) => {
-    for (let arg of args) {
-        const projDiv = classedElement('div', ['proj-item']);
+const updateProjSideBar = (items) => {
+    for (let item of items) {
+        const projDiv = classedElement('div', ['proj-item', 'added-projs']);
         const projTitle = classedElement('div');
         const addProjButton = classedElement('button');
         const buttonImg = classedElement('img', ['proj-icon']);
 
         buttonImg.src = new URL('./icons/remove.png', import.meta.url);
-        projTitle.textContent = arg;
+        projTitle.textContent = item;
         addProjButton.appendChild(buttonImg);
 
         appendChildren(projDiv, [projTitle, addProjButton]);
-        projectList.appendChild(projDiv);
+        document.querySelector('#projects').appendChild(projDiv);
     }
 }
 

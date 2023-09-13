@@ -1,26 +1,39 @@
 import './style.css';
-import {showSideBar, clearProjSidebar, updateProjSideBar} from './renderers';
+import {showSideBar, updateProjSideBar, clearProjSidebar} from './renderers';
+import {storage} from './controller';
 
-const deleteProject = () => {
-    console.log('deleteProj')
+const deleteProject = (e) => {
+    const myStorage = storage()
+    const projDiv = e.target.parentElement.parentElement;
+    console.log(myStorage.getProjects());
+    // myStorage.removeItem()
+    // projDiv.remove();
+    console.log(projDiv.textContent);
+}
+
+const addProj = (storage) => {
+    const projName = prompt();
+    const projects = storage.getProjects('projects');
+    projects.push(projName);
+    storage.setItem('projects', projects);
+    updateProjList([projName]);
 }
 
 const updateProjList = (projects) => {
-    updateProjSideBar(document.querySelector('#projects'), projects);
-    document.querySelectorAll('#projects > div > button').forEach(button => {
-        button.addEventListener('click', deleteProject);
+    updateProjSideBar(projects);
+    document.querySelectorAll('#projects > div.added-projs > button').forEach(button => {
+        button.addEventListener('click',  deleteProject);
     });
 }
 
 (() => {
-    // const fakeDB = hasStorage? localStorage: {};
-    const projects = JSON.parse(localStorage.getItem('projects'));
+    const myStorage = storage();
+    const projects = myStorage.getProjects('projects');
 
-    const projList = document.querySelector('#projects');
-    if (projects) {
-        clearProjSidebar(projList);
+    if (projects)
         updateProjList(projects);
-    }
-        
+    
     document.querySelector('.proj-title').addEventListener('click', showSideBar);
+    document.querySelector('#addproj').addEventListener('click', 
+    () => addProj(myStorage));
 })();
