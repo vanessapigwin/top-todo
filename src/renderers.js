@@ -68,10 +68,6 @@ const initProjSideBar = (projectList) => {
     projectList.appendChild(projDiv);
 }
 
-const clearProjSidebar = () => {
-    // document.querySelectorAll('#projects > .added-projs')
-}
-
 const updateProjSideBar = (items) => {
     for (let item of items) {
         const projDiv = classedElement('div', ['proj-item', 'added-projs']);
@@ -141,5 +137,4 @@ const makeSidebar = () => {
 export {
     showSideBar,
     updateProjSideBar,
-    clearProjSidebar
 }

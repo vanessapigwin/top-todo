@@ -1,21 +1,20 @@
 import './style.css';
-import {showSideBar, updateProjSideBar, clearProjSidebar} from './renderers';
-import {storage} from './controller';
+import {showSideBar, updateProjSideBar} from './renderers';
+import {storage} from './controllers';
 
 const deleteProject = (e) => {
     const myStorage = storage()
     const projDiv = e.target.parentElement.parentElement;
-    console.log(myStorage.getProjects());
-    // myStorage.removeItem()
-    // projDiv.remove();
-    console.log(projDiv.textContent);
+
+    if (myStorage.getProjects().includes(projDiv.textContent)) {
+        myStorage.removeProject(projDiv.textContent);
+        projDiv.remove();
+    }
 }
 
 const addProj = (storage) => {
     const projName = prompt();
-    const projects = storage.getProjects('projects');
-    projects.push(projName);
-    storage.setItem('projects', projects);
+    storage.addProject(projName);
     updateProjList([projName]);
 }
 

@@ -35,13 +35,27 @@ const storage = () => {
         }
         return getItem('projects');
     }
+
+    const addProject = (projName) => {
+        const projects = getProjects();
+        projects.push(projName);
+        setItem('projects', projects);
+        setItem(projName, []);
+    }
+
+    const removeProject = (projName) => {
+        setItem('projects', getProjects().filter(project => projName !== project));
+        removeItem(projName);
+    }
     
     return {
         activeStorage,
         setItem,
         getItem,
         removeItem,
-        getProjects
+        getProjects,
+        addProject,
+        removeProject
     }
 }
     
