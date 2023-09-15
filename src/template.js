@@ -170,8 +170,9 @@ const addTodoForm = () => {
         const container = classedElement('div', ['priority-button'])
         const button = classedElement('input');
         button.type = 'radio';
-        button.id = `choice${choice}`;
+        button.id = choice;
         button.name = 'priority';
+        button.value = choice;
         container.appendChild(button);
 
         const label = classedElement('label');

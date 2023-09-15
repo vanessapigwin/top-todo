@@ -1,45 +1,46 @@
 import './style.css';
 import  {updateProjSideBar, toggleModal} from './renderers';
 import {addProjForm, addTodoForm } from './template';
-import {storage} from './controllers';
-import {Priority, Todo} from './models';
+import {storage, processTodoData} from './controllers';
 
-const addProj = (storage) => {
+const addProj = () => {
     toggleModal();
     const form = addProjForm();
-    form.addEventListener('submit', (e) => processProjForm(e, storage));
+    form.addEventListener('submit', (e) => processProjForm(e));
 }
 
 const deleteProject = (e) => {
-    const myStorage = storage();
+    const _storage = storage();
     const projDiv = e.target.parentElement.parentElement;
 
-    if (myStorage.getProjects().includes(projDiv.textContent)) {
-        myStorage.removeProject(projDiv.textContent);
+    if (_storage.getProjects().includes(projDiv.textContent)) {
+        _storage.removeProject(projDiv.textContent);
         projDiv.remove();
     }
 }
 
-const processProjForm = (e, storage) => {
+const processProjForm = (e) => {
     e.preventDefault();
+    const _storage = storage()
     const projName = e.target[0].value;
-    const projects = storage.getProjects();
+    const projects = _storage.getProjects();
 
     if (projects.includes(projName)) {
         alert('Please use a unique name and try again');
     } else {
-        storage.addProject(projName);
-        updateProjList([projName])
+        _storage.addProject(projName);
+        updateProjSideBar([projName]);
     }
     e.target.remove();
     toggleModal();
 }
 
-const updateProjList = (projects) => {
-    updateProjSideBar(projects);
-    document.querySelectorAll('#projects > div.added-projs > button').forEach(button => {
-        button.addEventListener('click',  deleteProject);
-    });
+const initProjList = () => {
+    const _storage = storage();
+    const projects = _storage.getProjects();
+    if (projects.length > 0) {
+        updateProjSideBar(projects);
+    }
 }
 
 const addTodo = (storage) => {
@@ -48,23 +49,19 @@ const addTodo = (storage) => {
     form.addEventListener('submit', (e) => {processTodoForm(e, storage)});
 }
 
-const processTodoForm = (e, storage) => {
+const processTodoForm = (e) => {
     e.preventDefault();
-    
     const formData = new FormData(e.target);
-    console.log(...formData)
+    processTodoData(formData);
     e.target.remove();
     toggleModal();
 }
 
 (() => {
-    const myStorage = storage();
-    const projects = myStorage.getProjects('projects');
+    initProjList();
 
-    if (projects) {
-        updateProjList(projects);
-    }
-    
-    document.querySelector('#addtodo').addEventListener('click', () => addTodo(myStorage));
-    document.querySelector('#addproj').addEventListener('click', () => addProj(myStorage));
+    document.querySelector('#addproj').addEventListener('click', addProj);
+    document.querySelector('#addtodo').addEventListener('click', addTodo);
 })();
+
+export {deleteProject}

@@ -1,3 +1,5 @@
+import { compareAsc, format } from 'date-fns'
+
 const Priority = {
     Low: 'Low',
     Medium: 'Med',
@@ -5,7 +7,7 @@ const Priority = {
 }
 
 const Todo = (title, description, dueDate, priority, isDone) => {
-    this.isDone = false;
+
     return {title, description, dueDate, priority, isDone}
 }
 

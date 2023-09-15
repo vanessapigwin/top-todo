@@ -1,3 +1,5 @@
+import {Priority, Todo} from './models';
+
 // reference: MDN web docs - Using the web storage API
 const storageAvailable = (type) => {
     let storage;
@@ -31,7 +33,8 @@ const storage = () => {
         try {
             getItem('projects');
         } catch (e) {
-            setItem('projects', [])
+            setItem('projects', []);
+            setItem('default', []);
         }
         return getItem('projects');
     }
@@ -47,6 +50,13 @@ const storage = () => {
         setItem('projects', getProjects().filter(project => projName !== project));
         removeItem(projName);
     }
+
+    const getTask = () => {}
+
+    const deleteTask = () => {}
+    
+    const updateTask = () => {}
+    
     
     return {
         activeStorage,
@@ -58,7 +68,20 @@ const storage = () => {
         removeProject
     }
 }
+
+const processTodoData = (data) => {
+    let obj = {}
+    data.forEach((value, key) => obj[key] = value);
+    let todo = Todo(
+        obj.title,
+        obj.description,
+        obj.dueDate,
+        obj.priority,
+        false
+    );
+}
     
 export {
-    storage
+    storage,
+    processTodoData
 }
