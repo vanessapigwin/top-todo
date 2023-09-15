@@ -1,3 +1,5 @@
+import {Priority} from './models';
+
 const classedElement = (tag, cls) => {
     const element = document.createElement(tag);
     if (cls)
@@ -10,7 +12,16 @@ const appendChildren = (parent, children) => {
     children.forEach(child => parent.appendChild(child));
 }
 
-const makeLogo = () => {
+const TodoButton = () => {
+    const button = classedElement('button');
+    const buttonImg = classedElement('img');
+    button.id = 'addtodo';
+    buttonImg.src = new URL('./icons/add.png', import.meta.url);
+    button.appendChild(buttonImg);
+    return button
+}
+
+const Logo = () => {
     const logo = classedElement('div', ['logo', 'header']);
     const logoImg = classedElement('img');
     const logoTitle = classedElement('div');
@@ -22,7 +33,7 @@ const makeLogo = () => {
     return logo;
 }
 
-const makeDropDown = () => {
+const Dropdown = () => {
     const projTitleDiv = classedElement('div', ['proj-title', 'header']);
     const projTitleContent = classedElement('div');
     const projImg = classedElement('img');
@@ -34,25 +45,28 @@ const makeDropDown = () => {
     return projTitleDiv;
 }
 
-const makeModal = () => {
+const Modal = () => {
     const modalDiv = classedElement('div', ['modal']);
     modalDiv.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal'))
+        if (e.target.classList.contains('modal')) {
+            e.target.removeChild(e.target.lastElementChild);
             toggleModal();
+        }
+            
     });
     return modalDiv
 }
 
-const toggleModal = () => document.querySelector('.modal').classList.toggle('modal-visible');
+const toggleModal = (e) => document.querySelector('.modal').classList.toggle('modal-visible');
 
-const getAddProjForm = () => {
+const addProjForm = () => {
     const form = classedElement('form', ['modal-content']);
     const textField = classedElement('input');
     const button = classedElement('input');
     form.id = 'addProjForm';
     button.type = 'submit';
     button.value = 'Add Project';
-    textField.type = 'text';
+    textField.required = true;
     textField.placeholder = 'New Project';
     appendChildren(form, [textField, button]);
 
@@ -61,55 +75,62 @@ const getAddProjForm = () => {
     return form
 }
 
-const showSideBar = () => {
-    document.querySelector('.sidebar').classList.toggle('visible');
-    document.querySelector('.proj-title > img').classList.toggle('hidden');
-}
+const addTodoForm = () => {
+    // title
+    const titleField = classedElement('input');
+    titleField.name = 'title';
+    titleField.placeholder = 'Task name';
+    titleField.required = true;
 
-const populateSidebarList = (ul, items) => {
-    for (let item of items) {
-        const li = classedElement('li');
-        li.textContent = item;
-        ul.appendChild(li);
+    // description
+    const descField = classedElement('textarea');
+    descField.name = 'description';
+    descField.placeholder = 'Description';
+    // descField.type = 'textarea';
+    descField.rows = 5;
+
+    // dueDate
+    const dateField = classedElement('input');
+    dateField.type = 'date';
+    dateField.name = 'dueDate';
+    dateField.required = true;
+
+    // priority
+    const priorityChoice = classedElement('div', ['priority-buttons']);
+    for (const choice of Object.keys(Priority)) {
+        const container = classedElement('div', ['priority-button'])
+        const button = classedElement('input');
+        button.type = 'radio';
+        button.id = `choice${choice}`;
+        button.name = 'priority';
+        container.appendChild(button);
+
+        const label = classedElement('label');
+        label.for = `choice${choice}`;
+        label.textContent = Priority[choice];
+        container.appendChild(label);
+
+        button.checked = true;
+        priorityChoice.append(container);
     }
-    return ul;
-}
 
-const initProjSideBar = (projectList) => {
-    const projDiv = classedElement('div', ['proj-item']);
-    const projTitle = classedElement('div');
-    const addProjButton = classedElement('button');
-    const buttonImg = classedElement('img', ['proj-icon']);
-    buttonImg.id = 'addproj';
+    const button = classedElement('input');
+    button.type = 'submit';
+    button.value = 'Add Todo';
 
-    buttonImg.src = new URL('./icons/add.png', import.meta.url);
-    projTitle.textContent = 'All Projects';
-    addProjButton.appendChild(buttonImg);
-
-    appendChildren(projDiv, [projTitle, addProjButton]);
+    const form = classedElement('form', ['modal-content']);
+    form.id = 'addTodoForm';
     
-    projectList.appendChild(projDiv);
+    appendChildren(form, [titleField, descField, dateField, priorityChoice, button]);
+
+    document.querySelector('.modal').appendChild(form);
+    
+    return form
 }
 
-const updateProjSideBar = (items) => {
-    for (let item of items) {
-        const projDiv = classedElement('div', ['proj-item', 'added-projs']);
-        const projTitle = classedElement('div');
-        const addProjButton = classedElement('button');
-        const buttonImg = classedElement('img', ['proj-icon']);
-
-        buttonImg.src = new URL('./icons/remove.png', import.meta.url);
-        projTitle.textContent = item;
-        addProjButton.appendChild(buttonImg);
-
-        appendChildren(projDiv, [projTitle, addProjButton]);
-        document.querySelector('#projects').appendChild(projDiv);
-    }
-}
-
-const makeSidebar = () => {
+const Sidebar = () => {
     // by priority
-    const priorities = ['High', 'Moderate', 'Low'];
+    const priorities = Object.keys(Priority);
     const importanceDiv = classedElement('div', ['list-title']);
     const importanceList = classedElement('ul', ['categ-list', 'importance']);
 
@@ -141,29 +162,85 @@ const makeSidebar = () => {
     return sidebarContents;
 }
 
+const populateSidebarList = (ul, items) => {
+    for (let item of items) {
+        const li = classedElement('li');
+        li.textContent = item;
+        ul.appendChild(li);
+    }
+    return ul;
+}
+
+const initProjSideBar = (projectList) => {
+    const projDiv = classedElement('div', ['proj-item']);
+    const projTitle = classedElement('div');
+    const addProjButton = classedElement('button');
+    const buttonImg = classedElement('img', ['proj-icon']);
+    buttonImg.id = 'addproj';
+
+    buttonImg.src = new URL('./icons/add.png', import.meta.url);
+    projTitle.textContent = 'All Projects';
+    addProjButton.appendChild(buttonImg);
+
+    appendChildren(projDiv, [projTitle, addProjButton]);
+    
+    projectList.appendChild(projDiv);
+}
+
+const showSideBar = () => {
+    document.querySelector('.sidebar').classList.toggle('visible');
+    document.querySelector('.proj-title > img').classList.toggle('hidden');
+}
+
+const updateProjSideBar = (items) => {
+    for (let item of items) {
+        const projDiv = classedElement('div', ['proj-item', 'added-projs']);
+        const projTitle = classedElement('div');
+        const addProjButton = classedElement('button');
+        const buttonImg = classedElement('img', ['proj-icon']);
+
+        buttonImg.src = new URL('./icons/remove.png', import.meta.url);
+        projTitle.textContent = item;
+        addProjButton.appendChild(buttonImg);
+
+        appendChildren(projDiv, [projTitle, addProjButton]);
+        document.querySelector('#projects').appendChild(projDiv);
+    }
+}
+
+const ToDoArea = () => {
+    const toDoDiv = classedElement('div', ['todo-holder']);
+    const cardHolder = classedElement('div', ['card-holder']);
+    cardHolder.id = 'cardarea';
+
+    appendChildren(toDoDiv, [cardHolder, TodoButton()]);
+    return toDoDiv
+}
+
 // initialize UI
 (() => {
     // todo div
     const todos = ['test', 'test', 'test', 'test'];
-    const toDoDiv = classedElement('div', ['todo-holder']);
+
+    appendChildren(document.body, [
+        Modal(),
+        Logo(), 
+        Dropdown(), 
+        Sidebar(), 
+        ToDoArea()
+    ]);
+
     for (let todo of todos) {
         const div = classedElement('div', ['card']);
         div.textContent = todo;
-        toDoDiv.appendChild(div);
+        document.querySelector('#cardarea').appendChild(div);
     }
-
-    appendChildren(document.body, [
-        makeModal(),
-        makeLogo(), 
-        makeDropDown(), 
-        makeSidebar(), 
-        toDoDiv
-    ]);
 })();
 
 export {
     showSideBar,
     updateProjSideBar,
     toggleModal,
-    getAddProjForm 
+    addProjForm,
+    addTodoForm 
 }

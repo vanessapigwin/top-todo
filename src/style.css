@@ -15,16 +15,23 @@ body {
 }
 
 ul,
-.todo-holder {
+.todo-holder,
+#cardarea {
     display: flex;
     flex-direction: column;
+}
+
+#cardarea {
+    flex: 1;
+    overflow-y: auto;
 }
 
 ul {
     gap: 10px;
 }
 
-.todo-holder {
+#cardarea {
+    display: flex;
     padding: var(--default-pad);
     gap: var(--default-pad);
 }
@@ -116,9 +123,15 @@ ul.projects {
     left: 50%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--default-pad);
     align-items: center;
     transform: translate( -50%, -50%);
+    width: 200px;
+}
+
+#addtodo {
+    align-self: center;
+    margin-bottom: var(--default-pad);
 }
 
 @media only screen and (min-width: 600px) {
@@ -151,6 +164,11 @@ ul.projects {
     .sidebar {
         justify-content: left;
         border-right: var(--default-border);
+    }
+
+    #addtodo {
+        align-self: flex-end;
+        margin: 0 var(--default-pad) var(--default-pad) 0;
     }
 }
 
@@ -262,17 +280,76 @@ ul.timeline > li:nth-of-type(3)::before {
     background-color: white;
 }
 
-form > input[type=text] {
+form {
+    font-size: 0.9em;
+}
+
+form > input {
     border: none;
     border-bottom: solid 1px #ddd;
     text-align: center;
+    width: 100%;
+    line-height: 1.5rem;
+}
+
+textarea,
+form > input {
+    outline-width: 0;
 }
 
 form > input[type=submit] {
     text-align: center;
-    padding: 3px 10px;
+    padding: 4px 10px;
     background-color: var(--theme-blue);
     color: white;
     border: var(--theme-blue);
     border-radius: 3px;
+    width: 60%
+}
+
+input[type=radio]{
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+
+#addtodo {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: var(--theme-blue);
+    border: none;
+    cursor: pointer;
+}
+
+#addtodo:hover {
+    scale: 1.05;
+    transition: 0.3s cub5ic-bezier(0.075, 0.82, 0.165, 1);;
+}
+
+#addtodo > img {
+    filter: invert(1);
+}
+
+textarea {
+    resize: none;
+    border: var(--default-border);
+    font-family: inherit;
+    font-size: 100%;
+    padding: 10px;
+}
+
+.priority-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.priority-button {
+    width: 55px;
+    display: flex;
+    font-size: 0.9em;
+    line-height: 1.5em;
+    border: var(--default-border);
+    justify-content: center;
 }

@@ -1,6 +1,7 @@
 import './style.css';
-import {showSideBar, updateProjSideBar, toggleModal, getAddProjForm } from './renderers';
+import {showSideBar, updateProjSideBar, toggleModal, addProjForm, addTodoForm } from './renderers';
 import {storage} from './controllers';
+import {Priority, Todo} from './models';
 
 const deleteProject = (e) => {
     const myStorage = storage()
@@ -14,17 +15,21 @@ const deleteProject = (e) => {
 
 const addProj = (storage) => {
     toggleModal();
-    const form = getAddProjForm();
+    const form = addProjForm();
     form.addEventListener('submit', (e) => processProjForm(e, storage));
 }
 
 const processProjForm = (e, storage) => {
     e.preventDefault();
-
     const projName = e.target[0].value;
-    storage.addProject(projName);
-    updateProjList([projName])
+    const projects = storage.getProjects();
 
+    if (projects.includes(projName)) {
+        alert('Please use a unique name and try again');
+    } else {
+        storage.addProject(projName);
+        updateProjList([projName])
+    }
     e.target.remove();
     toggleModal();
 }
@@ -36,14 +41,30 @@ const updateProjList = (projects) => {
     });
 }
 
+const addTodo = (storage) => {
+    toggleModal();
+    const form = addTodoForm();
+    form.addEventListener('submit', (e) => {processTodoForm(e, storage)});
+}
+
+const processTodoForm = (e, storage) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    console.log(...formData)
+    e.target.remove();
+    toggleModal();
+}
+
 (() => {
     const myStorage = storage();
     const projects = myStorage.getProjects('projects');
 
-    if (projects)
+    if (projects) {
         updateProjList(projects);
+    }
     
     document.querySelector('.proj-title').addEventListener('click', showSideBar);
-    document.querySelector('#addproj').addEventListener('click', 
-    () => addProj(myStorage));
+    document.querySelector('#addtodo').addEventListener('click', () => addTodo(myStorage));
+    document.querySelector('#addproj').addEventListener('click', () => addProj(myStorage));
 })();

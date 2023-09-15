@@ -6,7 +6,8 @@ module.exports = {
         index: './src/index.js',
         models: './src/models.js',
         renderers: './src/renderers.js',
-        controllers: './src/controllers.js'
+        controllers: './src/controllers.js',
+        template: './src/controllers.js'
     },
     plugins: [
         new HtmlWebpackPlugin({
