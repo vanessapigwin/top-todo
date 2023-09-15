@@ -34,8 +34,31 @@ const makeDropDown = () => {
     return projTitleDiv;
 }
 
-const renderForm = () => {
-    console.log('majke form')
+const makeModal = () => {
+    const modalDiv = classedElement('div', ['modal']);
+    modalDiv.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal'))
+            toggleModal();
+    });
+    return modalDiv
+}
+
+const toggleModal = () => document.querySelector('.modal').classList.toggle('modal-visible');
+
+const getAddProjForm = () => {
+    const form = classedElement('form', ['modal-content']);
+    const textField = classedElement('input');
+    const button = classedElement('input');
+    form.id = 'addProjForm';
+    button.type = 'submit';
+    button.value = 'Add Project';
+    textField.type = 'text';
+    textField.placeholder = 'New Project';
+    appendChildren(form, [textField, button]);
+
+    document.querySelector('.modal').appendChild(form);
+    
+    return form
 }
 
 const showSideBar = () => {
@@ -130,11 +153,17 @@ const makeSidebar = () => {
     }
 
     appendChildren(document.body, [
-        makeLogo(), makeDropDown(), makeSidebar(), toDoDiv
+        makeModal(),
+        makeLogo(), 
+        makeDropDown(), 
+        makeSidebar(), 
+        toDoDiv
     ]);
 })();
 
 export {
     showSideBar,
     updateProjSideBar,
+    toggleModal,
+    getAddProjForm 
 }

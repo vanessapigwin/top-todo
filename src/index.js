@@ -1,5 +1,5 @@
 import './style.css';
-import {showSideBar, updateProjSideBar} from './renderers';
+import {showSideBar, updateProjSideBar, toggleModal, getAddProjForm } from './renderers';
 import {storage} from './controllers';
 
 const deleteProject = (e) => {
@@ -13,9 +13,20 @@ const deleteProject = (e) => {
 }
 
 const addProj = (storage) => {
-    const projName = prompt();
+    toggleModal();
+    const form = getAddProjForm();
+    form.addEventListener('submit', (e) => processProjForm(e, storage));
+}
+
+const processProjForm = (e, storage) => {
+    e.preventDefault();
+
+    const projName = e.target[0].value;
     storage.addProject(projName);
-    updateProjList([projName]);
+    updateProjList([projName])
+
+    e.target.remove();
+    toggleModal();
 }
 
 const updateProjList = (projects) => {
