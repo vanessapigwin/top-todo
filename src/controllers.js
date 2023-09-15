@@ -37,7 +37,6 @@ const storage = () => {
     }
 
     const addProject = (projName) => {
-        // todo: add handling of case when proj name already exists
         const projects = getProjects();
         projects.push(projName);
         setItem('projects', projects);

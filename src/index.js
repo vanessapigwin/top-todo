@@ -1,22 +1,23 @@
 import './style.css';
-import {showSideBar, updateProjSideBar, toggleModal, addProjForm, addTodoForm } from './renderers';
+import  {updateProjSideBar, toggleModal} from './renderers';
+import {addProjForm, addTodoForm } from './template';
 import {storage} from './controllers';
 import {Priority, Todo} from './models';
 
+const addProj = (storage) => {
+    toggleModal();
+    const form = addProjForm();
+    form.addEventListener('submit', (e) => processProjForm(e, storage));
+}
+
 const deleteProject = (e) => {
-    const myStorage = storage()
+    const myStorage = storage();
     const projDiv = e.target.parentElement.parentElement;
 
     if (myStorage.getProjects().includes(projDiv.textContent)) {
         myStorage.removeProject(projDiv.textContent);
         projDiv.remove();
     }
-}
-
-const addProj = (storage) => {
-    toggleModal();
-    const form = addProjForm();
-    form.addEventListener('submit', (e) => processProjForm(e, storage));
 }
 
 const processProjForm = (e, storage) => {
@@ -64,7 +65,6 @@ const processTodoForm = (e, storage) => {
         updateProjList(projects);
     }
     
-    document.querySelector('.proj-title').addEventListener('click', showSideBar);
     document.querySelector('#addtodo').addEventListener('click', () => addTodo(myStorage));
     document.querySelector('#addproj').addEventListener('click', () => addProj(myStorage));
 })();

@@ -7,7 +7,7 @@ module.exports = {
         models: './src/models.js',
         renderers: './src/renderers.js',
         controllers: './src/controllers.js',
-        template: './src/controllers.js'
+        template: './src/template.js'
     },
     plugins: [
         new HtmlWebpackPlugin({

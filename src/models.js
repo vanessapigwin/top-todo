@@ -4,8 +4,9 @@ const Priority = {
     High: 'High',
 }
 
-const Todo = (title, description, dueDate, priority) => {
-    return {title, description, dueDate, priority}
+const Todo = (title, description, dueDate, priority, isDone) => {
+    this.isDone = false;
+    return {title, description, dueDate, priority, isDone}
 }
 
 export {Priority, Todo}
