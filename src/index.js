@@ -1,8 +1,9 @@
 import './style.css';
 import  {updateProjSideBar, toggleModal} from './renderers';
 import {addProjForm, addTodoForm } from './template';
-import {storage, processTodoData} from './controllers';
+import {projectMapper, todoMapper, processTodoData} from './models';
 
+// project
 const addProj = () => {
     toggleModal();
     const form = addProjForm();
@@ -10,58 +11,68 @@ const addProj = () => {
 }
 
 const deleteProject = (e) => {
-    const _storage = storage();
+    const mapper = projectMapper();
     const projDiv = e.target.parentElement.parentElement;
 
-    if (_storage.getProjects().includes(projDiv.textContent)) {
-        _storage.removeProject(projDiv.textContent);
+    if (mapper.getProjects().includes(projDiv.textContent)) {
+        mapper.removeProject(projDiv.textContent);
         projDiv.remove();
+    }
+}
+
+const initProjList = () => {
+    const mapper = projectMapper();
+    const projects = mapper.getProjects();
+    if (projects.length > 0) {
+        updateProjSideBar(projects);
     }
 }
 
 const processProjForm = (e) => {
     e.preventDefault();
-    const _storage = storage()
+    const mapper = projectMapper();
     const projName = e.target[0].value;
-    const projects = _storage.getProjects();
+    const projects = mapper.getProjects();
 
     if (projects.includes(projName)) {
         alert('Please use a unique name and try again');
     } else {
-        _storage.addProject(projName);
+        mapper.addProject(projName);
         updateProjSideBar([projName]);
     }
     e.target.remove();
     toggleModal();
 }
 
-const initProjList = () => {
-    const _storage = storage();
-    const projects = _storage.getProjects();
-    if (projects.length > 0) {
-        updateProjSideBar(projects);
-    }
-}
-
-const addTodo = (storage) => {
+// todo
+const addTodo = (projName) => {
     toggleModal();
     const form = addTodoForm();
-    form.addEventListener('submit', (e) => {processTodoForm(e, storage)});
+    form.addEventListener('submit', e => processTodoForm(e, projName));
 }
 
-const processTodoForm = (e) => {
+const processTodoForm = (e, projectName) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    processTodoData(formData);
+    processTodoData(projectName, formData);
+    updateCardArea(projectName);
     e.target.remove();
     toggleModal();
 }
 
+const initTaskList = (currentProj) => {
+    const mapper = todoMapper();
+    const todos = mapper.getTodos(currentProj);
+    console.log(todos);
+}
+
 (() => {
+    const currentProj = 'Default';
     initProjList();
+    initTaskList(currentProj);
 
     document.querySelector('#addproj').addEventListener('click', addProj);
-    document.querySelector('#addtodo').addEventListener('click', addTodo);
+    document.querySelector('#addtodo').addEventListener('click', () => addTodo(currentProj));
 })();
 
 export {deleteProject}

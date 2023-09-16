@@ -308,7 +308,6 @@ form > input[type=submit] {
 }
 
 input[type=radio]{
-    visibility: hidden;
     height: 0;
     width: 0;
 }
@@ -346,10 +345,30 @@ textarea {
 }
 
 .priority-button {
+    height: 20px;
+    border-radius: 10px;
     width: 55px;
     display: flex;
     font-size: 0.9em;
     line-height: 1.5em;
-    border: var(--default-border);
+    border: solid 2px #eee;
     justify-content: center;
+}
+
+.priority-button:focus-within:nth-of-type(1)  {
+    border: solid 2px var(--theme-green);
+    color: var(--theme-green);
+    font-weight: bold;
+}
+
+.priority-button:focus-within:nth-of-type(2)  {
+    border: solid 2px var(--theme-yellow);
+    color: var(--theme-yellow);
+    font-weight: bold;
+}
+
+.priority-button:focus-within:nth-of-type(3)  {
+    border: solid 2px var(--theme-red);
+    color:var(--theme-red);
+    font-weight: bold;
 }

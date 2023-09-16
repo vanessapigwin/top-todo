@@ -37,7 +37,7 @@ const Dropdown = () => {
     const projTitleContent = classedElement('div');
     const projImg = classedElement('img');
 
-    projTitleContent.textContent = 'All Projects';
+    projTitleContent.textContent = 'Default';
     projImg.src = new URL('./icons/arrow_dd.png', import.meta.url);
     appendChildren(projTitleDiv, [projTitleContent, projImg]);
 
@@ -98,7 +98,7 @@ const initProjSideBar = (projectList) => {
     buttonImg.id = 'addproj';
 
     buttonImg.src = new URL('./icons/add.png', import.meta.url);
-    projTitle.textContent = 'All Projects';
+    projTitle.textContent = 'Default';
     addProjButton.appendChild(buttonImg);
 
     appendChildren(projDiv, [projTitle, addProjButton]);
@@ -155,7 +155,6 @@ const addTodoForm = () => {
     const descField = classedElement('textarea');
     descField.name = 'description';
     descField.placeholder = 'Description';
-    // descField.type = 'textarea';
     descField.rows = 5;
 
     // dueDate
@@ -176,11 +175,9 @@ const addTodoForm = () => {
         container.appendChild(button);
 
         const label = classedElement('label');
-        label.for = `choice${choice}`;
         label.textContent = Priority[choice];
+        label.setAttribute('for', choice);
         container.appendChild(label);
-
-        button.checked = true;
         priorityChoice.append(container);
     }
 

@@ -20,19 +20,13 @@ const updateProjSideBar = (items) => {
     }
 }
 
-// (() => {
-    // todo div
-    // const todos = ['test', 'test', 'test', 'test'];
-
-    // for (let todo of todos) {
-    //     const div = classedElement('div', ['card']);
-    //     div.textContent = todo;
-    //     document.querySelector('#cardarea').appendChild(div);
-    // }
-
-// })();
+const updateCardArea = (todos) => {
+    console.log(todos)
+    const cardArea = document.querySelector('#cardarea');
+}
 
 export {
     updateProjSideBar,
     toggleModal,
+    updateCardArea
 }
