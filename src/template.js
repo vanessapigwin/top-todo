@@ -210,5 +210,5 @@ export {
     classedElement,
     appendChildren,
     addProjForm,
-    addTodoForm 
+    addTodoForm,
 }

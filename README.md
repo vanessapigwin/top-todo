@@ -16,5 +16,9 @@ Live: https://vanessapigwin.github.io/top-todo/
 - [ ] Make add todo work
 - [ ] Make delete todo work
 - [ ] Make edit Todo work
+- [ ] Make date filters work
+- [ ] Make importance filters work
+- [x] Make project filters work
 
 ## Newly-learned concepts from Activity
+1. Planning out how to subdivide modules by functionality helps with dev speed

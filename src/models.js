@@ -45,8 +45,13 @@ const todoMapper = () => {
         list.push(todo);
         _storage.setItem(projectName, list)
     }
+    const removeTodo = (projName, idx) => {
+        const list = getTodos(projName);
+        list.splice(idx, 1)
+        _storage.setItem(projName, list);
+    }
 
-    return {getTodos, addTodos}
+    return {getTodos, addTodos, removeTodo}
  }
 
 // reference: MDN web docs - Using the web storage API
@@ -97,7 +102,6 @@ const processTodoData = (projectName, data) => {
         obj.priority,
         false
     );
-    // console.log(data)
     mapper.addTodos(projectName, todo);
 }
 

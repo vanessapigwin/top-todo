@@ -9,11 +9,7 @@
     --default-border: solid 1px #eee;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
-}
-
+body,
 ul,
 .todo-holder,
 #cardarea {
@@ -21,16 +17,13 @@ ul,
     flex-direction: column;
 }
 
-#cardarea {
-    flex: 1;
-    overflow-y: auto;
-}
-
 ul {
     gap: 10px;
 }
 
 #cardarea {
+    flex: 1;
+    overflow-y: auto;
     display: flex;
     padding: var(--default-pad);
     gap: var(--default-pad);
@@ -88,6 +81,10 @@ ul.projects {
     justify-content: space-between;
     height: 2em;
     align-items: center;
+}
+
+.proj-item > div {
+    flex: 1
 }
 
 .proj-item > button {
@@ -197,9 +194,7 @@ body {
     font-weight: bold;
 }
 
-.proj-title,
-.priority-list,
-.timeline-list {
+.proj-title {
     font-size: 1.2em;
 }
 
@@ -210,11 +205,7 @@ body {
 .proj-item > button {
     background-color: #fff;
     border: none;
-}
-
-.proj-item > button {
     visibility: hidden;
-
 }
 
 .proj-item:hover > button {
@@ -271,7 +262,6 @@ ul.timeline > li:nth-of-type(3)::before {
 
 .modal {
     background-color: var(--theme-black);
-
 }
 
 .modal-content {
@@ -370,5 +360,9 @@ textarea {
 .priority-button:focus-within:nth-of-type(3)  {
     border: solid 2px var(--theme-red);
     color:var(--theme-red);
+    font-weight: bold;
+}
+
+.bolded {
     font-weight: bold;
 }
