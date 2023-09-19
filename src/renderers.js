@@ -28,7 +28,7 @@ const updateProjSideBar = (items) => {
 }
 
 const updateTitleBar = (filterName) => {
-    const projTitle = document.querySelector('.proj-title');
+    const projTitle = document.querySelector('.proj-title > div');
     projTitle.textContent = filterName;
     for (const elem of document.querySelectorAll('.categ-list > *')) {
         if (elem.textContent === filterName)
@@ -65,7 +65,6 @@ const renderCardArea = (todos) => {
         const priorityButton = classedElement('select');
         priorityButton.name = 'priority';
         priorityButton.textContent = todo.priority;
-        
         // add current priority as option 0, then add alternatives
         const option = classedElement('option');
         option.value = todo.priority;
@@ -112,20 +111,20 @@ const renderCardArea = (todos) => {
 }
 
 const enableCard = (e) => {
-    document.querySelector('input[name=title]').disabled = false;
-    document.querySelector('select').disabled = false;
-    document.querySelector('input[name=dueDate]').disabled = false;
-    document.querySelector('textarea').disabled = false;
-    document.querySelector('.todo-edit').textContent = 'Done';
+    e.target.querySelector('input[name=title]').disabled = false;
+    e.target.querySelector('select').disabled = false;
+    e.target.querySelector('input[name=dueDate]').disabled = false;
+    e.target.querySelector('textarea').disabled = false;
+    e.target.querySelector('.todo-edit').textContent = 'Done';
     e.target.addEventListener('submit', controller.getEdits);
 }
 
 const disableCard = (e) => {
-    document.querySelector('input[name=title]').disabled = true;
-    document.querySelector('select').disabled = true;
-    document.querySelector('input[name=dueDate]').disabled = true;
-    document.querySelector('textarea').disabled = true;
-    document.querySelector('.todo-edit').textContent = 'Edit';
+    e.target.querySelector('input[name=title]').disabled = true;
+    e.target.querySelector('select').disabled = true;
+    e.target.querySelector('input[name=dueDate]').disabled = true;
+    e.target.querySelector('textarea').disabled = true;
+    e.target.querySelector('.todo-edit').textContent = 'Edit';
     e.target.removeEventListener('submit', controller.getEdits);
 }
 

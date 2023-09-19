@@ -10,6 +10,43 @@ const Todo = (title, description, dueDate, priority, isDone) => {
     return {title, description, dueDate, priority, isDone}
 }
 
+// reference: MDN web docs - Using the web storage API
+const storageAvailable = (type) => {
+    let storage;
+    try {
+        storage = window[type];
+        const x = 'best_cat';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    } catch (e) {
+        return (
+            e instanceof DOMException && (
+                e.code === 22 ||
+                e.code === 1014 ||
+                e.name === 'QuotaExceededError' ||
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            storage &&
+            storage.length !== 0
+        );
+    }
+}
+
+const storage = () => {
+    const activeStorage = storageAvailable('localStorage')? localStorage: {};
+
+    const setItem = (key, value) => activeStorage[key] = JSON.stringify(value);
+    const getItem = (key) => JSON.parse(activeStorage[key]);
+    const removeItem = (key) => {delete activeStorage[key]};
+    
+    return {
+        activeStorage,
+        setItem,
+        getItem,
+        removeItem,
+    }
+}
+
 const projectMapper = () => {
     const _storage = storage();
     const getProjects = () => {
@@ -59,42 +96,6 @@ const todoMapper = () => {
     return {getTodos, addTodos, removeTodo, updateTodo}
  }
 
-// reference: MDN web docs - Using the web storage API
-const storageAvailable = (type) => {
-    let storage;
-    try {
-        storage = window[type];
-        const x = 'best_cat';
-        storage.setItem(x, x);
-        storage.removeItem(x);
-        return true;
-    } catch (e) {
-        return (
-            e instanceof DOMException && (
-                e.code === 22 ||
-                e.code === 1014 ||
-                e.name === 'QuotaExceededError' ||
-                e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
-            storage &&
-            storage.length !== 0
-        );
-    }
-}
-
-const storage = () => {
-    const activeStorage = storageAvailable('localStorage')? localStorage: {};
-
-    const setItem = (key, value) => activeStorage[key] = JSON.stringify(value);
-    const getItem = (key) => JSON.parse(activeStorage[key]);
-    const removeItem = (key) => {delete activeStorage[key]};
-    
-    return {
-        activeStorage,
-        setItem,
-        getItem,
-        removeItem,
-    }
-}
 
 const processTodoData = (projectName, data) => {
     const mapper = todoMapper();
@@ -124,4 +125,11 @@ const processTodoEdit = (projectName, idx, data) => {
     mapper.updateTodo(projectName, idx, todo);
 }
 
-export {Priority, Todo, projectMapper, todoMapper, processTodoData, processTodoEdit}
+const processDoneTodo = (projectName, idx) => {
+    const mapper = todoMapper();
+    const todo = mapper.getTodos(projectName)[idx];
+    todo.isDone = todo.isDone? false: true;
+    mapper.updateTodo(projectName, idx, todo);
+}
+
+export {Priority, Todo, projectMapper, todoMapper, processTodoData, processTodoEdit, processDoneTodo}
