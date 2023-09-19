@@ -6,8 +6,8 @@ const Priority = {
     High: 'High',
 }
 
-const Todo = (title, description, dueDate, priority, isDone) => {
-    return {title, description, dueDate, priority, isDone}
+const Todo = (title, description, dueDate, priority, isDone, project) => {
+    return {title, description, dueDate, priority, isDone, project}
 }
 
 // reference: MDN web docs - Using the web storage API
@@ -82,18 +82,34 @@ const todoMapper = () => {
         list.push(todo);
         _storage.setItem(projectName, list)
     }
+
     const removeTodo = (projName, idx) => {
+        // todo: fix dependency on idx
         const list = getTodos(projName);
         list.splice(idx, 1)
         _storage.setItem(projName, list);
     }
+
     const updateTodo = (projName, idx, todo) => {
+        // todo: fix dependency on idx
         const list = getTodos(projName);
         list.splice(idx, 1, todo);
         _storage.setItem(projName, list);
     }
 
-    return {getTodos, addTodos, removeTodo, updateTodo}
+    const getAllTodos = () => {
+        const mapper = projectMapper();
+        const projects = mapper.getProjects();
+        projects.push('Default');
+        return projects.reduce((list, project) => list.concat(getTodos(project)), [])
+    }
+
+    const todosByImportance = (criteria) => {
+        const allTodos = getAllTodos();
+        return allTodos.filter( todo => todo['priority'] === criteria);
+    }
+
+    return {getTodos, addTodos, removeTodo, updateTodo, todosByImportance}
  }
 
 
@@ -106,12 +122,14 @@ const processTodoData = (projectName, data) => {
         obj.description,
         obj.dueDate,
         obj.priority,
-        false
+        false,
+        projectName
     );
     mapper.addTodos(projectName, todo);
 }
 
 const processTodoEdit = (projectName, idx, data) => {
+    // todo: fix dependency on idx
     const mapper = todoMapper();
     let obj = {}
     data.forEach((value, key) => obj[key] = value);
@@ -120,12 +138,14 @@ const processTodoEdit = (projectName, idx, data) => {
         obj.description,
         obj.dueDate,
         obj.priority,
-        obj.isDone? true: false
+        obj.isDone? true: false,
+        projectName
     );
     mapper.updateTodo(projectName, idx, todo);
 }
 
 const processDoneTodo = (projectName, idx) => {
+    // todo: fix dependency on idx
     const mapper = todoMapper();
     const todo = mapper.getTodos(projectName)[idx];
     todo.isDone = todo.isDone? false: true;

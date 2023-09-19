@@ -79,8 +79,11 @@ const controller = (()=> {
 
     // filters
     const filterByImportance = (e) => {
-        // TODO: complete this area
-        updateTitleBar(e.target.textContent);
+        const criteria = e.target.textContent;
+        const mapper = todoMapper();
+        const todos = mapper.todosByImportance(criteria);
+        renderCardArea(todos);
+        updateTitleBar(criteria);
     }
 
     const filterByDate = (e) => {
@@ -94,7 +97,7 @@ const controller = (()=> {
     }
 
     const getEdits = (e) => {
-        const projTitle = document.querySelector('.proj-title').textContent;
+        const projTitle = e.target.dataset.project;
         const idx = e.target.dataset.idx;
         const submitter = e.target.querySelector('.todo-edit');
         const data = new FormData(e.target, submitter);
@@ -110,7 +113,7 @@ const controller = (()=> {
     }
  
     const delCard = (e) => {
-        const projTitle = document.querySelector('.proj-title').textContent;
+        const projTitle = e.target.dataset.project;
         const idx = e.target.dataset.idx;
         const mapper = todoMapper();
         mapper.removeTodo(projTitle, idx);
@@ -119,16 +122,16 @@ const controller = (()=> {
     }
 
     const updateTask = (e) => {
-        const projTitle = document.querySelector('.proj-title').textContent;
         const form = e.target.parentElement;
         const idx = form.dataset.idx;
+        const projTitle = form.dataset.project;
         processDoneTodo(projTitle, idx);
     }
 
     return {
         initProjList, addProj, deleteProject,
         addTodo, updateTaskList, 
-        filterByImportance,filterByDate, filterByProj,
+        filterByImportance, filterByDate, filterByProj,
         delCard, editCard, getEdits, updateTask
     }
 

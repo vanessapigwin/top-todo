@@ -47,67 +47,69 @@ const clearCardArea = () => {
 
 const renderCardArea = (todos) => {
     clearCardArea();
-    for (let todo of todos) {
-        const form = classedElement('form', ['todo-card']);
-        form.dataset.idx = todos.indexOf(todo);
+    if (todos)
+        for (let todo of todos) {
+            const form = classedElement('form', ['todo-card']);
+            form.dataset.idx = todos.indexOf(todo);
+            form.dataset.project = todo.project;
 
-        const checkbox = classedElement('input', ['todo-data']);
-        checkbox.name = 'isDone';
-        checkbox.type = 'checkbox';
-        checkbox.checked = todo.isDone;
+            const checkbox = classedElement('input', ['todo-data']);
+            checkbox.name = 'isDone';
+            checkbox.type = 'checkbox';
+            checkbox.checked = todo.isDone;
 
-        const title = classedElement('input', ['todo-data']);
-        title.name = 'title';
-        title.value = todo.title;
-        title.required = true;
-        title.disabled = true;
+            const title = classedElement('input', ['todo-data']);
+            title.name = 'title';
+            title.value = todo.title;
+            title.required = true;
+            title.disabled = true;
 
-        const priorityButton = classedElement('select');
-        priorityButton.name = 'priority';
-        priorityButton.textContent = todo.priority;
-        // add current priority as option 0, then add alternatives
-        const option = classedElement('option');
-        option.value = todo.priority;
-        option.textContent = todo.priority;
-        priorityButton.appendChild(option);
-        const options = Object.keys(Priority).filter(value => value !== todo.priority);
-        for (const choice of options) {
+            const priorityButton = classedElement('select');
+            priorityButton.name = 'priority';
+            priorityButton.textContent = todo.priority;
+            // add current priority as option 0, then add alternatives
             const option = classedElement('option');
-            option.value = choice;
-            option.textContent = choice;
+            option.value = todo.priority;
+            option.textContent = todo.priority;
             priorityButton.appendChild(option);
-        }
-        priorityButton.disabled = true;
+            const options = Object.keys(Priority).filter(value => value !== todo.priority);
+            for (const choice of options) {
+                const option = classedElement('option');
+                option.value = choice;
+                option.textContent = choice;
+                priorityButton.appendChild(option);
+            }
+            priorityButton.disabled = true;
 
-        const dateField = classedElement('input', ['todo-data']);
-        dateField.name = 'dueDate';
-        dateField.type = 'date';
-        dateField.value = todo.dueDate;
-        dateField.disabled = true;
+            const dateField = classedElement('input', ['todo-data']);
+            dateField.name = 'dueDate';
+            dateField.type = 'date';
+            dateField.value = todo.dueDate;
+            dateField.disabled = true;
+            
+            const descField = classedElement('textarea', ['todo-data']);
+            descField.name = 'description';
+            descField.value = todo.description;
+            descField.disabled = true;
+
+            const buttonDiv = classedElement('div', ['todo-data']);
+            const editButton = classedElement('button', ['todo-edit']);
+            editButton.type = 'submit';
+            editButton.textContent = 'Edit';
+            const delButton = classedElement('button', ['todo-delete']);
+            delButton.type = 'reset';
+            delButton.textContent = 'Delete';
+            appendChildren(buttonDiv, [editButton, delButton]);
+
+            appendChildren(form, [
+                checkbox, title, dateField, priorityButton, descField, buttonDiv
+            ]);
         
-        const descField = classedElement('textarea', ['todo-data']);
-        descField.name = 'description';
-        descField.value = todo.description;
-        descField.disabled = true;
-
-        const buttonDiv = classedElement('div', ['todo-data']);
-        const editButton = classedElement('button', ['todo-edit']);
-        editButton.type = 'submit';
-        editButton.textContent = 'Edit';
-        const delButton = classedElement('button', ['todo-delete']);
-        delButton.type = 'reset';
-        delButton.textContent = 'Delete';
-        appendChildren(buttonDiv, [editButton, delButton]);
-
-        appendChildren(form, [
-            checkbox, title, dateField, priorityButton, descField, buttonDiv
-        ]);
-    
-        checkbox.addEventListener('click', controller.updateTask);
-        form.addEventListener('submit', controller.editCard);
-        form.addEventListener('reset', controller.delCard);
-        document.querySelector('#cardarea').appendChild(form);
-    }
+            checkbox.addEventListener('click', controller.updateTask);
+            form.addEventListener('submit', controller.editCard);
+            form.addEventListener('reset', controller.delCard);
+            document.querySelector('#cardarea').appendChild(form);
+        }
 }
 
 const enableCard = (e) => {
