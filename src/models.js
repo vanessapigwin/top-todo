@@ -50,8 +50,13 @@ const todoMapper = () => {
         list.splice(idx, 1)
         _storage.setItem(projName, list);
     }
+    const updateTodo = (projName, idx, todo) => {
+        const list = getTodos(projName);
+        list.splice(idx, 1, todo);
+        _storage.setItem(projName, list);
+    }
 
-    return {getTodos, addTodos, removeTodo}
+    return {getTodos, addTodos, removeTodo, updateTodo}
  }
 
 // reference: MDN web docs - Using the web storage API
@@ -105,4 +110,18 @@ const processTodoData = (projectName, data) => {
     mapper.addTodos(projectName, todo);
 }
 
-export {Priority, Todo, projectMapper, todoMapper, processTodoData}
+const processTodoEdit = (projectName, idx, data) => {
+    const mapper = todoMapper();
+    let obj = {}
+    data.forEach((value, key) => obj[key] = value);
+    let todo = Todo(
+        obj.title,
+        obj.description,
+        obj.dueDate,
+        obj.priority,
+        obj.isDone? true: false
+    );
+    mapper.updateTodo(projectName, idx, todo);
+}
+
+export {Priority, Todo, projectMapper, todoMapper, processTodoData, processTodoEdit}

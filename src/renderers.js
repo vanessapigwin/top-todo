@@ -1,6 +1,6 @@
 import { classedElement, appendChildren} from "./template";
 import { controller } from "./controllers";
-import { Priority } from './models';
+import {Priority} from './models';
 
 const toggleModal = () => document.querySelector('.modal').classList.toggle('modal-visible');
 
@@ -52,37 +52,81 @@ const renderCardArea = (todos) => {
         form.dataset.idx = todos.indexOf(todo);
 
         const checkbox = classedElement('input', ['todo-data']);
+        checkbox.name = 'isDone';
         checkbox.type = 'checkbox';
         checkbox.checked = todo.isDone;
 
         const title = classedElement('input', ['todo-data']);
+        title.name = 'title';
         title.value = todo.title;
         title.required = true;
         title.disabled = true;
 
-        const priorityButton = classedElement('div', ['priority-button']);
+        const priorityButton = classedElement('select');
+        priorityButton.name = 'priority';
         priorityButton.textContent = todo.priority;
-
-        const dateField = classedElement('div', ['todo-data']);
-        dateField.textContent = todo.dueDate;
         
-        const descField = classedElement('div', ['todo-data']);
-        descField.textContent = todo.description;
+        // add current priority as option 0, then add alternatives
+        const option = classedElement('option');
+        option.value = todo.priority;
+        option.textContent = todo.priority;
+        priorityButton.appendChild(option);
+        const options = Object.keys(Priority).filter(value => value !== todo.priority);
+        for (const choice of options) {
+            const option = classedElement('option');
+            option.value = choice;
+            option.textContent = choice;
+            priorityButton.appendChild(option);
+        }
+        priorityButton.disabled = true;
 
-        const editButton = classedElement('button', ['todo-data', 'todo-edit']);
+        const dateField = classedElement('input', ['todo-data']);
+        dateField.name = 'dueDate';
+        dateField.type = 'date';
+        dateField.value = todo.dueDate;
+        dateField.disabled = true;
+        
+        const descField = classedElement('textarea', ['todo-data']);
+        descField.name = 'description';
+        descField.value = todo.description;
+        descField.disabled = true;
+
+        const buttonDiv = classedElement('div', ['todo-data']);
+        const editButton = classedElement('button', ['todo-edit']);
         editButton.type = 'submit';
         editButton.textContent = 'Edit';
-
-        const delButton = classedElement('button', ['todo-data', 'todo-delete']);
+        const delButton = classedElement('button', ['todo-delete']);
         delButton.type = 'reset';
         delButton.textContent = 'Delete';
+        appendChildren(buttonDiv, [editButton, delButton]);
 
-        appendChildren(form, [checkbox, title, priorityButton, dateField, descField, editButton, delButton]);
-        document.querySelector('#cardarea').appendChild(form);
-
+        appendChildren(form, [
+            checkbox, title, dateField, priorityButton, descField, buttonDiv
+        ]);
+    
+        checkbox.addEventListener('click', controller.updateTask);
         form.addEventListener('submit', controller.editCard);
         form.addEventListener('reset', controller.delCard);
+        document.querySelector('#cardarea').appendChild(form);
     }
+}
+
+const enableCard = (e) => {
+    document.querySelector('input[name=title]').disabled = false;
+    document.querySelector('select').disabled = false;
+    document.querySelector('input[name=dueDate]').disabled = false;
+    document.querySelector('textarea').disabled = false;
+    document.querySelector('.todo-edit').textContent = 'Done';
+    e.target.addEventListener('submit', controller.getEdits);
+}
+
+const disableCard = (e) => {
+    document.querySelector('input[name=title]').disabled = true;
+    document.querySelector('select').disabled = true;
+    document.querySelector('input[name=dueDate]').disabled = true;
+    document.querySelector('textarea').disabled = true;
+    document.querySelector('.todo-edit').textContent = 'Edit';
+    e.target.removeEventListener('submit', controller.getEdits);
 }
 
 export {
@@ -90,5 +134,7 @@ export {
     initDefault,
     toggleModal,
     renderCardArea,
-    updateTitleBar
+    updateTitleBar,
+    enableCard,
+    disableCard
 }

@@ -1,6 +1,10 @@
-import { projectMapper, todoMapper, processTodoData } from './models';
+import { projectMapper, todoMapper, processTodoData, processTodoEdit } from './models';
 import { addProjForm, addTodoForm } from './template';
-import { toggleModal, initDefault, updateProjSideBar, renderCardArea, updateTitleBar } from './renderers';
+import { 
+    toggleModal, initDefault, updateProjSideBar, renderCardArea, updateTitleBar, 
+    enableCard, disableCard
+ } from './renderers';
+import { sub } from 'date-fns';
 
 const controller = (()=> {
     // project
@@ -89,12 +93,20 @@ const controller = (()=> {
         updateTaskList(currentProj);
     }
 
-    const editCard = (e) => {
+    const getEdits = (e) => {
+        const projTitle = document.querySelector('.proj-title').textContent;
         const idx = e.target.dataset.idx;
-        const data = new FormData(e.target);
-        console.log(data)
-        e.preventDefault()
-        console.log(idx)
+        const submitter = e.target.querySelector('.todo-edit');
+        const data = new FormData(e.target, submitter);
+        processTodoEdit(projTitle, idx, data);
+        disableCard(e);
+        updateTaskList(projTitle);
+        e.preventDefault();
+    }
+
+    const editCard = (e) => {
+        enableCard(e);
+        e.preventDefault();
     }
 
     const delCard = (e) => {
@@ -106,11 +118,16 @@ const controller = (()=> {
         e.preventDefault();
     }
 
+    const updateTask = (e) => {
+        // TODO: complete this area - checklist update
+        console.log(e)
+    }
+
     return {
         initProjList, addProj, deleteProject,
         addTodo, updateTaskList, 
         filterByImportance,filterByDate, filterByProj,
-        delCard, editCard
+        delCard, editCard, getEdits, updateTask
     }
 
 })();
