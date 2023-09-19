@@ -162,6 +162,7 @@ const addTodoForm = () => {
     dateField.type = 'date';
     dateField.name = 'dueDate';
     dateField.required = true;
+    dateField.min = new Date().toISOString().split('T')[0];
 
     // priority
     const priorityChoice = classedElement('div', ['priority-buttons']);
@@ -187,7 +188,6 @@ const addTodoForm = () => {
 
     const form = classedElement('form', ['modal-content']);
     form.id = 'addTodoForm';
-    
     appendChildren(form, [titleField, descField, dateField, priorityChoice, button]);
 
     document.querySelector('.modal').appendChild(form);

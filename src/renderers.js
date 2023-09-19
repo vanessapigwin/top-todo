@@ -39,10 +39,10 @@ const updateTitleBar = (filterName) => {
 }
 
 const clearCardArea = () => {
-    const children = document.querySelectorAll('#cardarea > *');
-    children.forEach(child => {
-        document.querySelector('#cardarea').removeChild(child);
-    })
+    const parent = document.querySelector('#cardarea');
+    while (parent.hasChildNodes()) {
+        parent.removeChild(parent.lastChild);
+    }
 }
 
 const renderCardArea = (todos) => {
@@ -50,7 +50,7 @@ const renderCardArea = (todos) => {
     if (todos)
         for (let todo of todos) {
             const form = classedElement('form', ['todo-card']);
-            form.dataset.idx = todos.indexOf(todo);
+            form.dataset.idx = todo.id;
             form.dataset.project = todo.project;
 
             const checkbox = classedElement('input', ['todo-data']);
@@ -86,6 +86,7 @@ const renderCardArea = (todos) => {
             dateField.type = 'date';
             dateField.value = todo.dueDate;
             dateField.disabled = true;
+            dateField.required = true;
             
             const descField = classedElement('textarea', ['todo-data']);
             descField.name = 'description';

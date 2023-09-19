@@ -1,4 +1,4 @@
-import { compareAsc, format } from 'date-fns'
+import { compareAsc, format, add, parse } from 'date-fns';
 
 const Priority = {
     Low: 'Low',
@@ -6,8 +6,8 @@ const Priority = {
     High: 'High',
 }
 
-const Todo = (title, description, dueDate, priority, isDone, project) => {
-    return {title, description, dueDate, priority, isDone, project}
+const Todo = (id, title, description, dueDate, priority, isDone, project) => {
+    return {id, title, description, dueDate, priority, isDone, project}
 }
 
 // reference: MDN web docs - Using the web storage API
@@ -59,16 +59,16 @@ const projectMapper = () => {
         return _storage.getItem('projects');
     }
 
-    const addProject = (projName) => {
+    const addProject = (projectName) => {
         const projects = getProjects();
-        projects.push(projName);
+        projects.push(projectName);
         _storage.setItem('projects', projects);
-        _storage.setItem(projName, []);
+        _storage.setItem(projectName, []);
     }
 
-    const removeProject = (projName) => {
-        _storage.setItem('projects', getProjects().filter(project => projName !== project));
-        _storage.removeItem(projName);
+    const removeProject = (projectName) => {
+        _storage.setItem('projects', getProjects().filter(project => projectName !== project));
+        _storage.removeItem(projectName);
     }
 
     return {getProjects, addProject, removeProject}
@@ -83,18 +83,16 @@ const todoMapper = () => {
         _storage.setItem(projectName, list)
     }
 
-    const removeTodo = (projName, idx) => {
-        // todo: fix dependency on idx
-        const list = getTodos(projName);
-        list.splice(idx, 1)
-        _storage.setItem(projName, list);
+    const removeTodo = (projectName, idx) => {
+        const list = getTodos(projectName);
+        _storage.setItem(projectName, list.filter( item => item.id !== idx));
     }
 
-    const updateTodo = (projName, idx, todo) => {
-        // todo: fix dependency on idx
-        const list = getTodos(projName);
+    const updateTodo = (projectName, todo) => {
+        const list = getTodos(projectName);
+        const idx = list.map(item => item.id).indexOf(todo.id);
         list.splice(idx, 1, todo);
-        _storage.setItem(projName, list);
+        _storage.setItem(projectName, list);
     }
 
     const getAllTodos = () => {
@@ -106,10 +104,32 @@ const todoMapper = () => {
 
     const todosByImportance = (criteria) => {
         const allTodos = getAllTodos();
-        return allTodos.filter( todo => todo['priority'] === criteria);
+        return allTodos.filter(todo => todo['priority'] === criteria);
     }
 
-    return {getTodos, addTodos, removeTodo, updateTodo, todosByImportance}
+    const todosByDate = (date) => {
+        const today = new Date();
+        const allTodos = getAllTodos();
+
+        if (date === 'Today') {
+            return allTodos
+                .filter(todo => todo['dueDate'] === format(today, 'yyyy-MM-dd'))
+        } else
+        if (date === 'This Week') {
+            const nextWeek = add(today, {weeks: 1});
+            return allTodos
+                .filter(todo => 
+                    parse(todo['dueDate'], 'yyyy-MM-dd', new Date()) > today &&
+                    parse(todo['dueDate'], 'yyyy-MM-dd', new Date()) <= nextWeek
+                )
+        } else 
+        if (date === 'Missed') {
+            console.log('missed')
+        }
+        return allTodos
+    }
+
+    return {getTodos, addTodos, removeTodo, updateTodo, todosByImportance, todosByDate}
  }
 
 
@@ -118,6 +138,7 @@ const processTodoData = (projectName, data) => {
     let obj = {}
     data.forEach((value, key) => obj[key] = value);
     let todo = Todo(
+        String(new Date().valueOf()),
         obj.title,
         obj.description,
         obj.dueDate,
@@ -134,6 +155,7 @@ const processTodoEdit = (projectName, idx, data) => {
     let obj = {}
     data.forEach((value, key) => obj[key] = value);
     let todo = Todo(
+        idx,
         obj.title,
         obj.description,
         obj.dueDate,
@@ -141,15 +163,16 @@ const processTodoEdit = (projectName, idx, data) => {
         obj.isDone? true: false,
         projectName
     );
-    mapper.updateTodo(projectName, idx, todo);
+    mapper.updateTodo(projectName, todo);
 }
 
 const processDoneTodo = (projectName, idx) => {
-    // todo: fix dependency on idx
     const mapper = todoMapper();
-    const todo = mapper.getTodos(projectName)[idx];
+    const list = mapper.getTodos(projectName);
+    const id = list.map(item => item.id).indexOf(idx);
+    const todo = mapper.getTodos(projectName)[id];
     todo.isDone = todo.isDone? false: true;
-    mapper.updateTodo(projectName, idx, todo);
+    mapper.updateTodo(projectName, todo);
 }
 
 export {Priority, Todo, projectMapper, todoMapper, processTodoData, processTodoEdit, processDoneTodo}

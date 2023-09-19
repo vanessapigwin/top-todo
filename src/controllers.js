@@ -4,7 +4,6 @@ import {
     toggleModal, initDefault, updateProjSideBar, renderCardArea, 
     updateTitleBar, enableCard, disableCard
  } from './renderers';
-import { sub } from 'date-fns';
 
 const controller = (()=> {
     // project
@@ -87,8 +86,12 @@ const controller = (()=> {
     }
 
     const filterByDate = (e) => {
-        // TODO: complete this area
-        updateTitleBar(e.target.textContent);
+        const date = e.target.textContent;
+        const mapper = todoMapper();
+        const todos = mapper.todosByDate(date);
+        console.log(todos)
+        // renderCardArea(todos);
+        // updateTitleBar(date);
     }
 
     const filterByProj = (e) => {
