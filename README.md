@@ -3,11 +3,8 @@ Lesson covering javascript objects
 
 Live: https://vanessapigwin.github.io/top-todo/
 
-# Output
-- ongoing
-
 ## Goal
-- [ ] Crude layout
+- [x] Crude layout
 - [x] Figure out which storage to use depending if localStorage is available
 - [x] Create models / objects (Todo)
 - [x] Add listeners to crude UI
@@ -16,7 +13,7 @@ Live: https://vanessapigwin.github.io/top-todo/
 - [x] Make add todo work
 - [x] Make delete todo work
 - [x] Make edit Todo work
-- [ ] Make date filters work
+- [x] Make date filters work
 - [x] Make importance filters work
 - [x] Make project filters work
 
