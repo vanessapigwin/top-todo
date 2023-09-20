@@ -149,6 +149,7 @@ ul.projects {
 @media only screen and (min-width: 600px) {
     body {
         height: 100vh;
+        width: 100vw;
         display: grid;
         grid-template-columns: 300px 1fr;
         grid-template-rows: auto 1fr;
@@ -182,13 +183,23 @@ ul.projects {
         align-self: flex-end;
         margin: 0 var(--default-pad) var(--default-pad) 0;
     }
+
+    #cardarea {
+        overflow: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 300px);
+        grid-template-rows: repeat(auto-fit, 400px);
+    }
+
+    .todo-card > textarea {
+        flex: 1
+    }
 }
 
 /* STYLING */
 * {
     margin: 0;
     padding: 0;
-    /* border: solid 1px red */
 }
 
 ul {
@@ -230,7 +241,7 @@ body {
 .todo-card {
     padding: var(--default-pad);
     border-radius: var(--default-pad);
-    border: var(--default-border);
+    border: solid 2px #eee;
 }
 
 ul.importance > li::before {
@@ -302,6 +313,8 @@ form > input {
     outline-width: 0;
 }
 
+.todo-edit,
+.todo-delete,
 form > input[type=submit] {
     text-align: center;
     padding: 4px 10px;
@@ -309,12 +322,18 @@ form > input[type=submit] {
     color: white;
     border: var(--theme-blue);
     border-radius: 3px;
-    width: 60%
+    width: 60%;
+    height: 1.8rem
 }
 
 input[type=radio]{
     height: 0;
     width: 0;
+}
+
+input[type=date]{
+    font-family: inherit;
+    font-size: 1rem;
 }
 
 #addtodo {
@@ -339,7 +358,7 @@ textarea {
     resize: none;
     border: var(--default-border);
     font-family: inherit;
-    font-size: 100%;
+    font-size: 90%;
     padding: 10px;
 }
 
@@ -380,4 +399,33 @@ textarea {
 
 .bolded {
     font-weight: bold;
+}
+
+/* todo card formatting */
+.todo-card > input:disabled,
+.todo-card > textarea:disabled {
+    background-color: white;
+}
+
+.todo-data > .todo-edit,
+.todo-data > .todo-delete {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.todo-delete {
+    background-color: var(--theme-black);
+}
+
+.todo-edit > img,
+.todo-delete > img {
+    height: 1.2rem;
+    filter: invert(1);
+}
+
+/* select area formatting */
+select {
+    height: 1.8rem;
+    background-color: white;
 }

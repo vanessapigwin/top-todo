@@ -89,9 +89,8 @@ const controller = (()=> {
         const date = e.target.textContent;
         const mapper = todoMapper();
         const todos = mapper.todosByDate(date);
-        console.log(todos)
-        // renderCardArea(todos);
-        // updateTitleBar(date);
+        renderCardArea(todos);
+        updateTitleBar(date);
     }
 
     const filterByProj = (e) => {

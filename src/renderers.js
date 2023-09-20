@@ -92,14 +92,19 @@ const renderCardArea = (todos) => {
             descField.name = 'description';
             descField.value = todo.description;
             descField.disabled = true;
+            descField.setAttribute('rows', '5');
 
             const buttonDiv = classedElement('div', ['todo-data']);
             const editButton = classedElement('button', ['todo-edit']);
+            const editButtomImg = classedElement('img');
             editButton.type = 'submit';
-            editButton.textContent = 'Edit';
+            editButtomImg.src = new URL('./icons/edit.png', import.meta.url);
+            editButton.appendChild(editButtomImg);
             const delButton = classedElement('button', ['todo-delete']);
+            const delButtonImg = classedElement('img');
             delButton.type = 'reset';
-            delButton.textContent = 'Delete';
+            delButtonImg.src = new URL('./icons/remove.png', import.meta.url);
+            delButton.appendChild(delButtonImg);
             appendChildren(buttonDiv, [editButton, delButton]);
 
             appendChildren(form, [
@@ -118,7 +123,7 @@ const enableCard = (e) => {
     e.target.querySelector('select').disabled = false;
     e.target.querySelector('input[name=dueDate]').disabled = false;
     e.target.querySelector('textarea').disabled = false;
-    e.target.querySelector('.todo-edit').textContent = 'Done';
+    e.target.querySelector('.todo-edit > img').src = new URL('./icons/done.png', import.meta.url);
     e.target.addEventListener('submit', controller.getEdits);
 }
 
@@ -127,7 +132,6 @@ const disableCard = (e) => {
     e.target.querySelector('select').disabled = true;
     e.target.querySelector('input[name=dueDate]').disabled = true;
     e.target.querySelector('textarea').disabled = true;
-    e.target.querySelector('.todo-edit').textContent = 'Edit';
     e.target.removeEventListener('submit', controller.getEdits);
 }
 

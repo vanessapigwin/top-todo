@@ -32,8 +32,10 @@ const storageAvailable = (type) => {
     }
 }
 
+const tempStorage = {}
+
 const storage = () => {
-    const activeStorage = storageAvailable('localStorage')? localStorage: {};
+    const activeStorage = storageAvailable('localStorage')? localStorage: tempStorage;
 
     const setItem = (key, value) => activeStorage[key] = JSON.stringify(value);
     const getItem = (key) => JSON.parse(activeStorage[key]);
@@ -124,7 +126,12 @@ const todoMapper = () => {
                 )
         } else 
         if (date === 'Missed') {
-            console.log('missed')
+            const yesterday = add(today, {days: -1}) 
+            return allTodos
+                .filter(todo =>
+                    parse(todo['dueDate'], 'yyyy-MM-dd', new Date()) <= yesterday &&
+                    !(todo['isDone'])
+                )
         }
         return allTodos
     }
@@ -150,7 +157,6 @@ const processTodoData = (projectName, data) => {
 }
 
 const processTodoEdit = (projectName, idx, data) => {
-    // todo: fix dependency on idx
     const mapper = todoMapper();
     let obj = {}
     data.forEach((value, key) => obj[key] = value);
