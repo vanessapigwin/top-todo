@@ -1,4 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@font-face {
+    font-family: 'Open Sans';
+    src: url('./fonts/opensans.ttf');
+}
+
 :root {
     --theme-blue: #4285F4;
     --theme-green: #34A853;
@@ -211,7 +215,8 @@ img {
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: 'Open Sans';
     color: var(--theme-black);
 }
 
